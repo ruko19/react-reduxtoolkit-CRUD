@@ -1,11 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { createUsers, fetchUsers } from './redux/features/userSlice.js/userSlice'
 
 const App = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState("")
+  const [id, setId] = useState("")
+
+
+
+  const dispatch = useDispatch()
+
+  const { users } = useSelector(state => state.users)
+
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  }, [])
+
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const initialState = {
+      name,
+      email,
+      age,
+
+
+    }
+    dispatch(createUsers(initialState))
+
+  }
+
+
   return (
     <div>
       <h1 className="text-3xl font-bold underline">
-        Hello world!
+        users
       </h1>
+      <div className='grid grid-cols-4 gap-7'>
+        {
+          users.map(({ id, name, email, age }) => (
+            <div key={id} className='border'>
+              <h3>{name}</h3>
+              <p>{email}</p>
+              <p>{age}</p>
+            </div>
+
+          ))
+        }
+      </div>
+      <hr />
+
+      <div className='flex flex-col items-center justify-center'>
+        <form onSubmit={handleSubmit} className=' flex flex-col border w-80 p-4 gap-7'>
+          <input onChange={(e) => setName(e.target.value)} className='border p-3' type="text" placeholder='name' />
+          <input onChange={(e) => setEmail(e.target.value)} className='border p-3' type="email" placeholder='email' />
+          <input onChange={(e) => setAge(e.target.value)} className='border p-3' type=" text" placeholder='age' />
+          <button className='bg-lime-500 p-3' type='submit'>Crear</button>
+          <button className='bg-red-500 p-3'>eliminar</button>
+
+
+        </form>
+
+      </div>
+
+
     </div>
   )
 }
