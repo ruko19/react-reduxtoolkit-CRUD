@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { createUsers, fetchUsers } from './redux/features/userSlice.js/userSlice'
+import { createUsers, deleteUsers, fetchUsers } from './redux/features/userSlice.js/userSlice'
 
 const App = () => {
   const [name, setName] = useState("");
@@ -13,6 +13,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   const { users } = useSelector(state => state.users)
+
 
 
   useEffect(() => {
@@ -32,6 +33,10 @@ const App = () => {
 
     }
     dispatch(createUsers(initialState))
+  }
+
+  const handleDelete = (id) => {
+    dispatch(deleteUsers(id))
 
   }
 
@@ -48,6 +53,7 @@ const App = () => {
               <h3>{name}</h3>
               <p>{email}</p>
               <p>{age}</p>
+              <button onClick={() => handleDelete(id)} className='bg-red-500 p-3'>eliminar</button>
             </div>
 
           ))
@@ -61,7 +67,7 @@ const App = () => {
           <input onChange={(e) => setEmail(e.target.value)} className='border p-3' type="email" placeholder='email' />
           <input onChange={(e) => setAge(e.target.value)} className='border p-3' type=" text" placeholder='age' />
           <button className='bg-lime-500 p-3' type='submit'>Crear</button>
-          <button className='bg-red-500 p-3'>eliminar</button>
+
 
 
         </form>

@@ -9,7 +9,6 @@ const initialState = {
 
 }
 
-
 export const fetchUsers = createAsyncThunk(
     "user/fetchUsers",
     async (_, { dispatch }) => {
@@ -41,12 +40,28 @@ export const createUsers = createAsyncThunk(
 
 )
 
+export const deleteUsers = createAsyncThunk(
+    "user/deleteUsers",
+    async (id) => {
+        try {
+
+            await usersAPI.delete(`/user/${id}`)
+            return id
+
+        } catch (error) {
+
+        }
+    }
+)
+
+
 export const userSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
         getDataUsers: (state, actions) => {
             state.users = actions.payload.users
+
         },
     },
     extraReducers: (builder) => {
@@ -62,7 +77,13 @@ export const userSlice = createSlice({
                 'That thing is still around?',
                 'question'
             )
-        })
+        });
+
+        builder.addCase(deleteUsers.fulfilled, (state, action) => {
+            console.log(action.payload)
+            state.users = state.users.filter(user => user.id !== action.payload);
+
+        });
     },
 
 
